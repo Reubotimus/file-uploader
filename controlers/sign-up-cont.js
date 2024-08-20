@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const prisma = require('../prisma/client');
+const prisma = require('../helpers/client');
 const { body, validationResult } = require("express-validator");
 
 async function postEndpoint(req, res, next) {
@@ -10,7 +10,14 @@ async function postEndpoint(req, res, next) {
             if (err) { next(err); }
             else {
                 try {
-                    await prisma.user.create({ data: { username: req.body.username, password: hashedPassword } })
+                    await prisma.user.create({
+                        data:
+                        {
+                            username: req.body.username,
+                            password: hashedPassword,
+                            folders: { create: { name: "root", parentId: null } }
+                        }
+                    })
                     res.redirect('/');
                 } catch (err) {
                     next(err)

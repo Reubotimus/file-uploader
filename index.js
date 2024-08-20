@@ -5,7 +5,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const prisma = require('./prisma/client');
+const prisma = require('./helpers/client');
 const indexRouter = require('./routers/indexRouter');
 
 const app = express();

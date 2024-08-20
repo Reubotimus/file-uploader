@@ -17,18 +17,18 @@ model User {
   id       Int      @id @default(autoincrement())
   username String   @unique
   password String
-  Folder   Folder[] @relation("owner")
+  folders  Folder[] @relation("owner")
 }
 
 model Folder {
-  id       Int      @id @default(autoincrement())
-  name     String
-  userId   Int
-  parentId Int
-  user     User     @relation("owner", fields: [userId], references: [id])
-  parent   Folder?  @relation("parent folder", fields: [parentId], references: [id])
-  Folder   Folder[] @relation("parent folder")
-  File     File[]   @relation("file container")
+  id           Int      @id @default(autoincrement())
+  name         String
+  userId       Int
+  parentId     Int?
+  user         User     @relation("owner", fields: [userId], references: [id])
+  parent       Folder?  @relation("parent folder", fields: [parentId], references: [id])
+  childFolders Folder[] @relation("parent folder")
+  files        File[]   @relation("file container")
 }
 
 model File {

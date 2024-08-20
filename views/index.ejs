@@ -9,9 +9,36 @@
 
 <body>
     <% if (locals.user) { %>
-        <div>Welcome back <%= locals.user.username %>
+        <div>
+            Welcome back <%= locals.user.username %>
+                <%= currentPath %>
         </div>
-        <% } %>
+        <h3>Create Folder</h3>
+        <form method="POST" action=<%="/folders/" + currentFolder.id%>>
+            <label for="name">Name: </label>
+            <input type="text" name="name" id="name-input">
+            <input type="submit" value="submit">
+            <input type="hidden" name="parent" value="<%= currentFolder.id %>">
+            <input type="hidden" name="path" value=<%=currentPath %>>
+        </form>
+        <h3>Upload File</h3>
+        <form method="POST" action=<%="/files/" + currentFolder.id%> enctype="multipart/form-data">
+            <input type="file" name="file" id="file-input">
+            <input type="submit" value="submit">
+            <input type="hidden" name="parent" value="<%= currentFolder.id %>">
+            <input type="hidden" name="path" value=<%=currentPath %>>
+        </form>
+
+        <% folders.map(folder=> { %>
+            <a href=<%=currentPath + folder.name + '/' %>><%= folder.name %></a>
+            <% }) %>
+
+                <% files.map(file=> { %>
+                    <%= file.name %>
+                        <% }) %>
+
+                            <% } %>
+
 </body>
 
 </html>
