@@ -7,7 +7,6 @@ async function checkPath(req) {
     if (path[path.length - 1] == '') {
         path = path.slice(0, path.length - 1);
     }
-    console.log(path)
     let folders = await prisma.folder.findMany({ where: { userId: req.user.id } })
     let prev = null;
     let foldersInPath = [];

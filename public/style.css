@@ -1,0 +1,174 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+div {
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+h3 {
+    margin-top: 40px;
+    color: #555;
+}
+
+label {
+    font-weight: bold;
+    margin-right: 10px;
+    display: block;
+    align-items: center;
+    display: flex;
+}
+
+#new-file-form, #new-folder-form {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+}
+
+#new-file-form input[type="submit"] {
+    margin: 0;
+}
+
+#new-file-form input[type="file"] {
+    margin: 0;
+}
+
+#new-folder-form input[type="submit"] {
+    margin: 0;
+}
+
+#new-folder-form input[type="text"] {
+    margin: 0;
+}
+
+
+input[type="text"],
+input[type="file"],
+input[type="password"] {
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"],
+button {
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 90px;
+    height: 30px;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #218838;
+}
+
+.file, .folder {
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file form {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+    background-color: #f4f4f4;
+    margin-bottom: 20px;
+}
+
+header div {
+    margin: 0;
+}
+
+.path {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #555;
+    justify-content: center;
+    flex: 1;
+    margin: 0;
+}
+
+.path a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.path .slash {
+    margin: 0 5px;
+    color: #555;
+}
+
+.log-out {
+    font-size: 16px;
+}
+
+.log-out a {
+    color: #dc3545;
+    text-decoration: none;
+}
+
+.log-out a:hover {
+    text-decoration: underline;
+}
+
+form .delete-button {
+    background-color: #dd4c4c;
+}
+
+form .delete-button:hover {
+    background-color: #c93838;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+    gap: 5px;
+}

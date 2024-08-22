@@ -48,19 +48,21 @@ async function uploadFiles(req, res, next) {
 const postFile = [upload.array('file', 10), uploadFiles];
 
 async function getFile(req, res, next) {
-    console.log(req.query);
+    console.log({
+        name: decodeURIComponent(req.query.filename), 
+        folderId: Number(req.query.folder), 
+        userId: req.user.id 
+    } )
     let file = undefined;
-    try {
-        file = await prisma.file.findUnique({ where: 
-            { name_folderId_userId: {
-                name: req.query.filename, 
-                folderId: Number(req.query.folder), 
-                userId: req.user.id 
-            }} 
-        });
-    } catch (err) {
-        return next(err);
-    }
+    file = await prisma.file.findUnique({ where: 
+        { name_folderId_userId: {
+            name: decodeURIComponent(req.query.filename), 
+            folderId: Number(req.query.folder), 
+            userId: req.user.id 
+        }} 
+    });
+    
+    if (file == undefined) {return next(new Error("unable to find file"))}
     let key = req.query.path === '/' ? `${file.userId}/${file.name}` : `${file.userId}${req.query.path}${file.name}`
     console.log(key)
 
@@ -82,6 +84,51 @@ async function getFile(req, res, next) {
     });
 }
 
+async function deleteFile(req, res, next) {
+    console.log("---DELETING---");
+    console.log({
+        name: decodeURIComponent(req.query.filename), 
+        folderId: Number(req.query.folder), 
+        userId: req.user.id 
+    } )
+    let file;
+
+    try {
+        file = await prisma.file.findUnique({
+            where: {
+                name_folderId_userId: {
+                    name: decodeURIComponent(req.query.filename),
+                    folderId: Number(req.query.folder),
+                    userId: req.user.id
+                }
+            }
+        });
+
+        if (!file) {
+            throw new Error('File does not exist')
+        }
+
+        let key = req.query.path === '/' 
+            ? `${file.userId}/${file.name}` 
+            : `${file.userId}${req.query.path}/${file.name}`;
+    
+        console.log(key);
+    
+        const params = {
+            Bucket: 'file-uploader',
+            Key: key
+        };
+
+        await s3.deleteObject(params).promise();
+        console.log('File deleted successfully');
+
+        await prisma.file.delete({where: {id: file.id}});
+    } catch (err) {
+        return next(err);
+    }
+
+    res.redirect(req.query.path);
+}
 
 
-module.exports = { postFile, getFile }
+module.exports = { postFile, getFile, deleteFile }

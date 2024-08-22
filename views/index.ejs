@@ -5,48 +5,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
-    <% if (locals.user) { %>
-        <div>
-            Welcome back <%= locals.user.username %>
-                <%= currentPath %>
+    <header>
+        <div class="username">
+            <%= locals.user.username %>
         </div>
-        <h3>Create Folder</h3>
-        <form method="POST" action=<%="/folders/" + currentFolder.id%>>
-            <label for="name">Name: </label>
-            <input type="text" name="name" id="name-input">
-            <input type="submit" value="submit">
-            <input type="hidden" name="parent" value="<%= currentFolder.id %>">
-            <input type="hidden" name="path" value=<%=currentPath %>>
-        </form>
-        <h3>Upload File</h3>
-        <form method="POST" action=<%="/files/" + currentFolder.id%> enctype="multipart/form-data">
-            <input type="file" name="file" id="file-input" multiple>
-            <input type="submit" value="submit">
-            <input type="hidden" name="parent" value="<%= currentFolder.id %>">
-            <input type="hidden" name="path" value=<%=currentPath %>>
-        </form>
-
+        <div class="path">
+            <% let path = currentPath.split('/') %>
+            <% path = path[path.length - 1] === '' ? path.slice(1, path.length - 1) : path.slice(1) %>
+            <a href="/">home</a>
+            <span class="slash">/</span>
+            <% for (let i = 0; i < path.length; i++) { %>
+                <a href=<%='/' + path.slice(0, i + 1).join('/') + '/'%>><%=path[i]%></a>
+                <span class="slash">/</span>
+            <% } %>
+        </div>
+        <div class="log-out"><a href="/log-out">log out</a></div>
+    </header>
+        
+    <h3>Folders</h3>
+    <div class="folders">
+        <div class="folder">
+            <form method="POST" action=<%="/folders/" + currentFolder.id%> id="new-folder-form">
+                <label for="name">New: </label>
+                <input type="text" name="name" id="name-input">
+                <input type="submit" value="submit">
+                <input type="hidden" name="parent" value="<%= currentFolder.id %>">
+                <input type="hidden" name="path" value=<%=currentPath %>>
+            </form>
+        </div>
         <% folders.map(folder=> { %>
-            <a href=<%=currentPath + folder.name + '/' %>><%= folder.name %></a>
+            <div class="folder">
+                <a href=<%=currentPath + folder.name + '/' %>><%= folder.name %></a>
+            </div>
         <% }) %>
-
+    </div>
+    <h3>Files</h3>
+    <div class="files">
+        <div class="file">
+            <form method="POST" action=<%="/files/" + currentFolder.id%> enctype="multipart/form-data" id="new-file-form">
+                <input type="file" name="file" id="file-input" multiple>
+                <input type="submit" value="submit">
+                <input type="hidden" name="parent" value="<%= currentFolder.id %>">
+                <input type="hidden" name="path" value=<%=currentPath %>>
+            </form>
+        </div>
         <% files.map(file=> { %>
             <div class="file">
                 <%= file.name %>
-                <form method="GET" action="/file">
-                    <input type="hidden" name="filename" value=<%= file.name %>>
-                    <input type="hidden" name="folder" value=<%= currentFolder.id %>>
-                    <input type="hidden" name="path" value=<%= currentPath %>>
-                    <input type="submit" value="download">
-                </form>
-
+                <div class="buttons">
+                    <form method="GET" action="/download/file">
+                        <input type="hidden" name="filename" value=<%= encodeURIComponent(file.name) %>>
+                        <input type="hidden" name="folder" value=<%= currentFolder.id %>>
+                        <input type="hidden" name="path" value=<%= currentPath %>>
+                        <input type="submit" value="download">
+                    </form>
+                    <form method="GET" action="/delete/file">
+                        <input type="hidden" name="filename" value=<%= encodeURIComponent(file.name) %>>
+                        <input type="hidden" name="folder" value=<%= currentFolder.id %>>
+                        <input type="hidden" name="path" value=<%= currentPath %>>
+                        <input type="submit" value="delete" class="delete-button">
+                    </form>
+                </div>
+    
             </div>
         <% }) %>
+    </div>
 
-    <% } %>
 
 </body>
 
