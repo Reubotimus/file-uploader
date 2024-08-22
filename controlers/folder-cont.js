@@ -1,4 +1,5 @@
 const prisma = require('../helpers/client');
+const { body, validationResult } = require('express-validator');
 
 async function checkPath(req) {
     let path = (req.baseUrl + req.path).split('/');
@@ -40,4 +41,22 @@ async function getFolder(req, res, next) {
     }
 }
 
-module.exports = { getFolder }
+async function uploadFolder(req, res, next) {
+    console.log(validationResult(req))
+    console.log(/[^a-zA-Z0-9-]/.test(req.body.name))
+    try {
+        if (!validationResult(req).isEmpty()) { throw new Error('invalid folder name') }
+        await prisma.folder.create({ data: { name: req.body.name, parentId: Number(req.body.parent), userId: req.user.id } })
+    } catch (err) {
+        return next(err)
+    }
+    res.redirect(req.body.path)
+}
+const postFolder = [body('name').custom(name => {
+    if (/[^a-zA-Z0-9-]/.test(name)) {
+        throw new Error('invalid characters used')
+    }
+    return true;
+}), body('name').notEmpty(), uploadFolder]
+
+module.exports = { getFolder, postFolder }

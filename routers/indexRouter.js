@@ -4,12 +4,20 @@ const router = express.Router();
 const { getIndex } = require('../controlers/index-cont')
 const { getLogIn, postLogIn, logOut } = require('../controlers/log-in-cont')
 const { postSignUp, getSignUp } = require('../controlers/sign-up-cont')
-const { getFolder } = require('../controlers/folder-cont')
-const { postFile, postFolder } = require('../controlers/post-docs')
+const { getFolder, postFolder } = require('../controlers/folder-cont')
+const { postFile, getFile } = require('../controlers/file-cont')
+
+router.use((req, res, next) => {
+    if (!req.user && req.path !== '/log-in' && req.path !== '/sign-up') {
+        res.redirect('/log-in');
+    }
+    else { next() }
+})
 
 router.get('/log-in', getLogIn);
 router.get('/sign-up', getSignUp);
 router.get('/log-out', logOut);
+router.get('/file', getFile);
 
 router.post('/log-in', postLogIn);
 router.post('/sign-up', postSignUp);

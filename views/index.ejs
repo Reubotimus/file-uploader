@@ -23,7 +23,7 @@
         </form>
         <h3>Upload File</h3>
         <form method="POST" action=<%="/files/" + currentFolder.id%> enctype="multipart/form-data">
-            <input type="file" name="file" id="file-input">
+            <input type="file" name="file" id="file-input" multiple>
             <input type="submit" value="submit">
             <input type="hidden" name="parent" value="<%= currentFolder.id %>">
             <input type="hidden" name="path" value=<%=currentPath %>>
@@ -31,13 +31,22 @@
 
         <% folders.map(folder=> { %>
             <a href=<%=currentPath + folder.name + '/' %>><%= folder.name %></a>
-            <% }) %>
+        <% }) %>
 
-                <% files.map(file=> { %>
-                    <%= file.name %>
-                        <% }) %>
+        <% files.map(file=> { %>
+            <div class="file">
+                <%= file.name %>
+                <form method="GET" action="/file">
+                    <input type="hidden" name="filename" value=<%= file.name %>>
+                    <input type="hidden" name="folder" value=<%= currentFolder.id %>>
+                    <input type="hidden" name="path" value=<%= currentPath %>>
+                    <input type="submit" value="download">
+                </form>
 
-                            <% } %>
+            </div>
+        <% }) %>
+
+    <% } %>
 
 </body>
 
