@@ -32,7 +32,21 @@ async function getFolder(req, res, next) {
 
     try {
         let path = await checkPath(req);
-        let folders = await prisma.folder.findMany({ where: { parentId: path[path.length - 1].id } })
+        let folders = await prisma.folder.findMany({ 
+            where: { parentId: path[path.length - 1].id }, 
+            select: {
+                id: true,
+                name: true,
+                parentId: true,
+                _count: {
+                    select: {
+                        childFolders: true,
+                        files: true,
+                    }
+                }
+            }
+        })
+        console.log(folders[0])
         let files = await prisma.file.findMany({ where: { folderId: path[path.length - 1].id } })
         res.render('index', { folders: folders, files: files, currentFolder: path[path.length - 1], currentPath: req.baseUrl + req.path })
     } catch (err) {
@@ -58,4 +72,18 @@ const postFolder = [body('name').custom(name => {
     return true;
 }), body('name').notEmpty(), uploadFolder]
 
-module.exports = { getFolder, postFolder }
+async function deleteFolder(req, res, next) {
+    console.log("params")
+    console.log(req.params)
+    console.log("body")
+    console.log(req.body)
+    try {
+        await prisma.folder.delete({where: {id: Number(req.params.folderId)}});
+    } catch(err) {
+        return next(err);
+    }
+
+    res.redirect(req.query.path);
+}
+
+module.exports = { getFolder, postFolder, deleteFolder }

@@ -6,10 +6,6 @@ body {
     color: #333;
 }
 
-div {
-    margin-bottom: 20px;
-}
-
 h1 {
     color: #333;
     margin-bottom: 20px;
@@ -171,4 +167,22 @@ form .delete-button:hover {
     align-items: center;
     margin: 0;
     gap: 5px;
+}
+
+
+.folder-name {
+    order: 1;
+    flex: 1; /* Makes this element grow to take available space */
+}
+
+.folder-count {
+    order: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+.folder form {
+    order: 3;
+    margin-left: auto; /* Pushes the form to the far right */
 }

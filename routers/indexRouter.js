@@ -4,7 +4,7 @@ const router = express.Router();
 const { getIndex } = require('../controlers/index-cont')
 const { getLogIn, postLogIn, logOut } = require('../controlers/log-in-cont')
 const { postSignUp, getSignUp } = require('../controlers/sign-up-cont')
-const { getFolder, postFolder } = require('../controlers/folder-cont')
+const { getFolder, postFolder, deleteFolder } = require('../controlers/folder-cont')
 const { postFile, getFile, deleteFile } = require('../controlers/file-cont')
 
 router.use((req, res, next) => {
@@ -25,6 +25,7 @@ router.post('/files/:folderId', postFile);
 router.post('/folders/:folderId', postFolder);
 
 router.get('/delete/file', deleteFile);
+router.get('/delete/folder/:folderId', deleteFolder);
 
 router.get(/^\/(?:[a-zA-Z0-9-]+\/)*[a-zA-Z0-9-]*$/, getFolder);
 
