@@ -110,7 +110,7 @@ async function deleteFile(req, res, next) {
 
         let key = req.query.path === '/' 
             ? `${file.userId}/${file.name}` 
-            : `${file.userId}${req.query.path}/${file.name}`;
+            : `${file.userId}${req.query.path}${file.name}`;
     
         console.log(key);
     
